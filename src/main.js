@@ -64,16 +64,14 @@ function analyzeSalesData(data, options) {
     throw new Error("Некорректные входные данные");
   }
 
-  if (!options || typeof options !== "object") {
+  /* if (!options || typeof options !== "object") {
     throw new Error("Некорректные опции, возможно опции не объект");
   }
-
-  /*if (options == null 
-        || typeof options !== "object"
-    ) {
-        throw new Error('Опции должны быть объектом');
-    }
   */
+
+  if (options == null || typeof options !== "object") {
+    throw new Error("Некорректные опции, возможно опции не объект");
+  }
 
   const { calculateRevenue, calculateBonus } = options; // Сюда передадим функции для расчётов
 
@@ -120,6 +118,7 @@ function analyzeSalesData(data, options) {
   data.purchase_records.forEach((record) => {
     // Чек
     const seller = sellerIndex[record.seller_id]; // Продавец
+    if (!seller) return;
 
     // Увеличить количество продаж
     seller.sales_count += 1;
@@ -129,6 +128,7 @@ function analyzeSalesData(data, options) {
 
     // Расчёт прибыли для каждого товара
     record.items.forEach((item) => {
+      if (!product) return;
       // перебираем товары (итемсы) в покупке (purchase_records), по сути в чеке
 
       const product = productIndex[item.sku]; // Товар
@@ -157,7 +157,6 @@ function analyzeSalesData(data, options) {
 
   // Сортируем продавцов по прибыли
   sellerStats.sort((a, b) => b.profit - a.profit);
-  console.log(sellerStats);
 
   // Вызовем функцию расчёта бонуса для каждого продавца в отсортированном массиве
   sellerStats.forEach((seller, index) => {
