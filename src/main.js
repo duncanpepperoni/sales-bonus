@@ -52,7 +52,7 @@ function calculateBonusByProfit(index, total, seller) {
 
 function analyzeSalesData(data, options) {
   // Здесь проверим входящие данные
-  if (
+  /*if (
     !data ||
     (!Array.isArray(data.sellers) &&
       !Array.isArray(data.products) &&
@@ -60,6 +60,18 @@ function analyzeSalesData(data, options) {
     (data.sellers.length === 0 &&
       data.products.length === 0 &&
       data.purchase_records.length === 0)
+  ) {
+    throw new Error("Некорректные входные данные");
+  }*/
+
+  if (
+    !data ||
+    !Array.isArray(data.sellers) ||
+    !Array.isArray(data.products) ||
+    !Array.isArray(data.purchase_records) ||
+    data.sellers.length === 0 ||
+    data.products.length === 0 ||
+    data.purchase_records.length === 0
   ) {
     throw new Error("Некорректные входные данные");
   }
@@ -118,7 +130,7 @@ function analyzeSalesData(data, options) {
   data.purchase_records.forEach((record) => {
     // Чек
     const seller = sellerIndex[record.seller_id]; // Продавец
-    if (!seller) return;
+    //if (!seller) return;
 
     // Увеличить количество продаж
     seller.sales_count += 1;
@@ -128,7 +140,7 @@ function analyzeSalesData(data, options) {
 
     // Расчёт прибыли для каждого товара
     record.items.forEach((item) => {
-      if (!product) return;
+      //if (!product) return;
       // перебираем товары (итемсы) в покупке (purchase_records), по сути в чеке
 
       const product = productIndex[item.sku]; // Товар
