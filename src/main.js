@@ -52,17 +52,6 @@ function calculateBonusByProfit(index, total, seller) {
 
 function analyzeSalesData(data, options) {
   // Здесь проверим входящие данные
-  /*if (
-    !data ||
-    (!Array.isArray(data.sellers) &&
-      !Array.isArray(data.products) &&
-      !Array.isArray(data.purchase_records)) ||
-    (data.sellers.length === 0 &&
-      data.products.length === 0 &&
-      data.purchase_records.length === 0)
-  ) {
-    throw new Error("Некорректные входные данные");
-  }*/
 
   if (
     !data ||
@@ -130,7 +119,6 @@ function analyzeSalesData(data, options) {
   data.purchase_records.forEach((record) => {
     // Чек
     const seller = sellerIndex[record.seller_id]; // Продавец
-    //if (!seller) return;
 
     // Увеличить количество продаж
     seller.sales_count += 1;
@@ -140,7 +128,6 @@ function analyzeSalesData(data, options) {
 
     // Расчёт прибыли для каждого товара
     record.items.forEach((item) => {
-      //if (!product) return;
       // перебираем товары (итемсы) в покупке (purchase_records), по сути в чеке
 
       const product = productIndex[item.sku]; // Товар
@@ -184,10 +171,10 @@ function analyzeSalesData(data, options) {
   return sellerStats.map((seller) => ({
     seller_id: seller.id, // Строка, идентификатор продавца
     name: seller.name, // Строка, имя продавца
-    revenue: seller.revenue.toFixed(2), // Число с двумя знаками после точки, выручка продавца
-    profit: seller.profit.toFixed(2), // Число с двумя знаками после точки, прибыль продавца
+    revenue: +seller.revenue.toFixed(2), // Число с двумя знаками после точки, выручка продавца
+    profit: +seller.profit.toFixed(2), // Число с двумя знаками после точки, прибыль продавца
     sales_count: seller.sales_count, // Целое число, количество продаж продавца
     top_products: seller.top_products, // Массив объектов вида: { "sku": "SKU_008","quantity": 10}, топ-10 товаров продавца
-    bonus: seller.bonus.toFixed(2), // Число с двумя знаками после точки, бонус продавца
+    bonus: +seller.bonus.toFixed(2), // Число с двумя знаками после точки, бонус продавца
   }));
 }
